@@ -1,3 +1,67 @@
+## Dockerize the app
+- `Dockerfile.dev` - run in dev mode
+- `Dockerfile.prod` - run in production/deployed
+
+## in Development
+Creating `Dockerfile.dev`
+
+```Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json .
+RUN npm install
+
+COPY . .
+
+CMD [ "npm", "run", "start" ]
+```
+
+1. `rm -rf node_modules`
+2. `docker build -t sbasangovs/react-app -f Dockerfile.dev`
+3. `docker run -p 3000:3000 sbasangovs/react-app`
+
+## How to make our Container automatically 'hot reload' reflectiong our local source code changes ?
+### Use docker volumes
+
+![doker volumes diagram](./Docker_volumes.png)
+
+#### command to run:
+1. `rm -rf node_modules`
+2. `docker build -t sbasangovs/react-app -f Dockerfile.dev`
+3. `docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app sbasangovs/react-app`
+
+#### Explaination:
+- `-v /app/node_modules` - do not map the image's `node-modules/`
+- `-v $(pwd):/app` - map pesent working directory to the image's /app (except `node-modules/`)
+
+### Use docker volumes with docker-compose
+
+- create `docker-compose.yml`
+
+```yml
+version: '3'
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+```
+
+#### Explaination:
+- `build: > context: .`- build context current working dir
+- `build: > context: . > dockerfile: Dockerfile.dev` - dockerfile to build image is in current working directory filename `Dockerfile.dev`
+- `- /app/node_modules` -  bookmark `node-modules/`, do not map the image's `node-modules/`
+- `- .:/app` - map pesent working directory to the image's /app (except `node-modules/`)
+
+#### command to run:
+`docker-compose up`
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
