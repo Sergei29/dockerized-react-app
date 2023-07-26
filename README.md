@@ -62,6 +62,44 @@ services:
 
 #### command to run:
 `docker-compose up`
+
+### Running tests
+`docker run -it sbasangovs/react-app npm run test`
+
+### Running tests hot reload
+### Approach 1:
+#### Terminal /Tab 1: 
+- `docker-compose up`
+#### Terminal /Tab 2: 
+- `docker-compose up`
+- `docker exec -it <container ID> npm run test`
+
+### Approach 2:
+#### Add a test container to `docker-compose.yml`
+```yml
+version: '3'
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
+```
+- `docker-compose up --build` it will run the both containers `react-app and` and `test`, the `test` container
+will run in hot-reload mode
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
