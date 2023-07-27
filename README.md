@@ -97,7 +97,8 @@ services:
       - .:/app
     command: ["npm", "run", "test"]
 ```
-- `docker-compose up --build` it will run the both containers `react-app and` and `test`, the `test` container
+- `docker-compose up --build` it will run the both containers `react-app` and `tests`
+- both containers `react-app` and `tests` containers
 will run in hot-reload mode
 
 # Getting Started with Create React App
