@@ -105,9 +105,9 @@ will run in hot-reload mode
 #### Multi-step build process
 ![doker multi-step diagram](./Multi-step-build-docker.png)
 
-`$ touch Dockerfile`, for productio we shall create a `Dockerfile` ( see the `Dockerfile` comments)
-`$ docker build -t sbasangovs/react-appp-prod .`
-`$ docker run -p 8080:80 sbasangovs/react-appp-prod`
+- `$ touch Dockerfile`, for production we shall create a `Dockerfile` ( see the `Dockerfile` comments)
+- `$ docker build -t sbasangovs/react-appp-prod .`
+- `$ docker run -p 8080:80 sbasangovs/react-appp-prod`
 - above we shall map browser port `8080` to port  `80` which is default port for nginx server
 - in browser, can see the production version app at `http://localhost:8080`
 
